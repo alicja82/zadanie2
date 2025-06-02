@@ -39,24 +39,22 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push image with cache
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: false
-          platforms: linux/amd64,linux/arm64
-          tags: ${{ env.IMAGE_NAME }}:latest
-          cache-from: type=registry,ref=docker.io/${{ secrets.DOCKERHUB_USERNAME }}/cache-node-app:cache
-          cache-to: type=registry,ref=docker.io/${{ secrets.DOCKERHUB_USERNAME }}/cache-node-app:cache,mode=max
+      - name: Build local amd64 image for Trivy scan
+        run: |
+          docker build --platform=linux/amd64 -t zadanie2-scan:latest .
 
-      - name: Scan image with Trivy
-        uses: aquasecurity/trivy-action@0.30.0
-        with:
-          image-ref: ${{ env.IMAGE_NAME }}:latest
-          exit-code: 1
-          severity: CRITICAL,HIGH
+      - name: Run Trivy scan and save report
+        run: |
+          trivy image --exit-code 1 --severity CRITICAL,HIGH --format json \
+            -o trivy-report.json zadanie2-scan:latest
 
-      - name: Push image to GitHub Container Registry
+      - name: Upload Trivy report
+        uses: actions/upload-artifact@v4
+        with:
+          name: trivy-report
+          path: trivy-report.json
+
+      - name: Build and push multiarch image
         if: success()
         uses: docker/build-push-action@v5
         with:
