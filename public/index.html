@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Aplikacja Pogodowa</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Sprawdź pogodę</h1>
+
+  <form id="weather-form">
+    <label for="country">Wybierz kraj:</label>
+    <select id="country" required>
+      <option value="">-- wybierz kraj --</option>
+      <option value="pl">Polska</option>
+      <option value="uk">Wielka Brytania</option>
+      <option value="fr">Francja</option>
+    </select>
+
+    <br><br>
+
+    <div id="city-container">
+      <label for="city">Wybierz miasto:</label>
+      <select id="city" required>
+        <option value="">-- wybierz miasto --</option>
+      </select>
+    </div>
+
+    <br><br>
+
+    <button type="submit">Pokaż pogodę</button>
+  </form>
+
+  <div id="result"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
