@@ -17,8 +17,6 @@ Całość została opisana w pliku `.github/workflows/build.yml`.
 6. Jeśli Trivy nie wykryje luk o krytycznym lub wysokim poziomie zagrożenia, wykonywana jest budowa i publikacja obrazu dla architektur `amd64` oraz `arm64`, z użyciem cache z DockerHub.
 7. Obraz zostaje oznaczony tagiem `latest`.
 
----
-
 ## Uzasadnienie
 
 ### Multiarch build
@@ -48,8 +46,6 @@ W pipeline zaimplementowany jest warunek, że jeśli Trivy wykryje luki o poziom
 ### Plik `.trivyignore`
 
 W pliku `.trivyignore` dodałam wykluczenie błędu `CVE-2024-21538` z paczki `cross-spawn`. Mimo aktualizacji do wersji `7.0.5`, Trivy nadal zgłaszał lukę z wersji `7.0.3`. Ignorowanie tej pozycji zapobiega fałszywym alarmom i niepotrzebnemu blokowaniu procesu publikacji obrazu.
-
----
 
 ## Uruchomienie pipeline
 
