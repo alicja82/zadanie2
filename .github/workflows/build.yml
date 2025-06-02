@@ -41,21 +41,19 @@ jobs:
 
       - name: Build local amd64 image for Trivy scan
         run: |
-          docker build --platform=linux/amd64 -t zadanie2-scan:latest .
+          docker build \
+            --platform=linux/amd64 \
+            -t zadanie2-scan:latest \
+            .
 
-      - name: Run Trivy scan and save report
-        run: |
-          trivy image --exit-code 1 --severity CRITICAL,HIGH --format json \
-            -o trivy-report.json zadanie2-scan:latest
-
-      - name: Upload Trivy report
-        uses: actions/upload-artifact@v4
+      - name: Scan image with Trivy
+        uses: aquasecurity/trivy-action@0.30.0
         with:
-          name: trivy-report
-          path: trivy-report.json
+          image-ref: zadanie2-scan:latest
+          exit-code: 1
+          severity: CRITICAL,HIGH
 
       - name: Build and push multiarch image
-        if: success()
         uses: docker/build-push-action@v5
         with:
           context: .
